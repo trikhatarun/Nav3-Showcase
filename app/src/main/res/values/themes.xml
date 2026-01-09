@@ -2,4 +2,10 @@
 <resources>
 
     <style name="Theme.Nav3Sample" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Nav3Sample.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@android:color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.Nav3Sample</item>
+    </style>
 </resources>
