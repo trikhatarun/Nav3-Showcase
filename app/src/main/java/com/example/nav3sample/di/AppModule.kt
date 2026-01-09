@@ -1,7 +1,7 @@
 package com.example.nav3sample.di
 
 import com.example.foundation.navigation.Navigator
-import com.example.offers.api.OffersNavigation
+import com.example.nav3sample.MainNavigation
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,6 +14,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNavigator(): Navigator = Navigator(startDestination = OffersNavigation.Offers)
+    fun provideNavigator(): Navigator = Navigator(startDestination = MainNavigation.Main)
 }
 

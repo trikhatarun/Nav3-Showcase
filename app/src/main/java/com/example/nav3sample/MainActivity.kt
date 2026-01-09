@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -68,22 +69,16 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(isLoggedIn: Boolean, modifier: Modifier = Modifier) {
+fun MainScreen(openOffers: () -> Unit, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = if (isLoggedIn) "User is logged in" else "User is not logged in"
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MainScreenPreview() {
-    Nav3SampleTheme {
-        MainScreen(isLoggedIn = false)
+        Button(onClick = {
+            openOffers()
+        }) {
+            Text("Open Offers")
+        }
     }
 }

@@ -8,11 +8,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 
 @HiltViewModel(assistedFactory = OfferDetailsViewModel.Factory::class)
 class OfferDetailsViewModel @AssistedInject constructor(
-    @Assisted val id: String
+    @Assisted val id: Int
 ) : ViewModel() {
 
     @AssistedFactory
     interface Factory {
-        fun create(id: String): OfferDetailsViewModel
+        fun create(id: Int): OfferDetailsViewModel
     }
 }

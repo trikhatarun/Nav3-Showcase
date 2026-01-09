@@ -11,7 +11,7 @@ import com.example.design.Nav3SampleTheme
 
 @Composable
 fun OfferDetailsUi(
-    id: String,
+    id: Int,
     viewModel: OfferDetailsViewModel = hiltViewModel<OfferDetailsViewModel, OfferDetailsViewModel.Factory>(
         creationCallback = { it.create(id) }
     )

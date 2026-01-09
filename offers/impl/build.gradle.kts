@@ -39,8 +39,6 @@ kotlin {
     }
 }
 dependencies {
-    implementation(project(":offers:api"))
-    implementation(project(":foundation:navigation"))
     implementation(project(":foundation:design"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
