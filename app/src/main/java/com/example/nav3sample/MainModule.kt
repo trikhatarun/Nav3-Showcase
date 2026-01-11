@@ -1,5 +1,6 @@
 package com.example.nav3sample
 
+import androidx.navigation3.runtime.NavKey
 import com.example.foundation.navigation.EntryProviderInstaller
 import com.example.foundation.navigation.Navigator
 import com.example.nav3sample.ui.MainScreen
@@ -11,7 +12,7 @@ import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.multibindings.IntoSet
 
 object MainNavigation {
-    object Main
+    object Main : NavKey
 }
 
 @Module

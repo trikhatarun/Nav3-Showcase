@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
                         onBack = { navigator.goBack() },
                         entryProvider = entryProvider {
                             entryProviderScopes.forEach { builder ->
-                                this.builder()
+                                builder()
                             }
                         },
                     )
