@@ -2,6 +2,7 @@ package com.example.nav3sample
 
 import com.example.foundation.navigation.EntryProviderInstaller
 import com.example.foundation.navigation.Navigator
+import com.example.nav3sample.ui.MainScreen
 import com.example.offers.api.OffersNavigation
 import dagger.Module
 import dagger.Provides
@@ -21,9 +22,9 @@ object OffersModule {
     @Provides
     fun provideOffersEntryProviderInstaller(navigator: Navigator): EntryProviderInstaller = {
         entry<MainNavigation.Main> {
-            MainScreen({
-                navigator.goTo(OffersNavigation.Offers)
-            })
+            MainScreen(
+                openOffers = { navigator.goTo(OffersNavigation.Offers) }
+            )
         }
     }
 }
