@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.offers.impl"
+    namespace = "com.example.profile.impl"
     compileSdk = 36
 
     defaultConfig {
@@ -40,7 +40,6 @@ kotlin {
 }
 dependencies {
     implementation(project(":foundation:navigation"))
-    implementation(project(":offers:api"))
     implementation(project(":profile:api"))
     implementation(project(":foundation:design"))
     implementation(libs.androidx.core.ktx)

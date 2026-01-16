@@ -17,7 +17,7 @@ object MainNavigation {
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-object OffersModule {
+object MainModule {
 
     @IntoSet
     @Provides

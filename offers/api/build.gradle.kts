@@ -42,14 +42,11 @@ kotlin {
 
 dependencies {
     implementation(project(":foundation:navigation"))
-    implementation(project(":offers:impl"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
 }

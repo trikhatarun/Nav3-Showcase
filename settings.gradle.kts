@@ -23,5 +23,7 @@ rootProject.name = "Nav3 Sample"
 include(":app")
 include(":offers:api")
 include(":offers:impl")
+include(":profile:api")
+include(":profile:impl")
 include(":foundation:navigation")
 include(":foundation:design")

@@ -50,6 +50,8 @@ dependencies {
     implementation(project(":foundation:navigation"))
     implementation(project(":foundation:design"))
     implementation(project(":offers:api"))
+    implementation(project(":offers:impl"))
+    implementation(project(":profile:impl"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.lifecycle.runtime.ktx)
