@@ -44,8 +44,10 @@ class BottomSheetSceneStrategy<T : Any> : SceneStrategy<T> {
 
     override fun SceneStrategyScope<T>.calculateScene(entries: List<NavEntry<T>>): Scene<T>? {
         val lastEntry = entries.lastOrNull()
+        // Check if the last entry has bottom sheet metadata. If not, return null to let other strategies handle it.
         val bottomSheetProperties = lastEntry?.metadata?.get(BOTTOM_SHEET_KEY) as? ModalBottomSheetProperties
         return bottomSheetProperties?.let { properties ->
+            // Safe cast: contentKey is guaranteed to be of type T as it comes from NavEntry<T>
             @Suppress("UNCHECKED_CAST")
             BottomSheetScene(
                 key = lastEntry.contentKey as T,
