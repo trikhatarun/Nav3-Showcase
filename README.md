@@ -214,12 +214,160 @@ NavDisplay(
 
 ---
 
-### 2. 🚧 Under Construction
+### 2. Bottom Sheet Navigation with Scene Strategy
+
+This use case demonstrates how to use **Material 3 Modal Bottom Sheets** with Navigation 3's scene strategy system.
+
+#### Overview
+
+The bottom sheet implementation uses a custom `SceneStrategy` to intercept navigation entries marked with bottom sheet metadata and render them inside a `ModalBottomSheet` instead of the default full-screen layout.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        MainActivity                         │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                      NavDisplay                       │  │
+│  │  sceneStrategy = BottomSheetSceneStrategy             │  │
+│  │           │                                           │  │
+│  │           ▼                                           │  │
+│  │  Checks entry.metadata for "bottomsheet" key         │  │
+│  │           │                                           │  │
+│  │      ┌────┴────┐                                     │  │
+│  │      ▼         ▼                                     │  │
+│  │   Found    Not Found                                 │  │
+│  │     │          │                                     │  │
+│  │     ▼          ▼                                     │  │
+│  │  Render in   Normal                                  │  │
+│  │  ModalBottom  Scene                                  │  │
+│  │  Sheet                                               │  │
+│  └───────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### Key Components
+
+**1. BottomSheetSceneStrategy**
+
+A custom `SceneStrategy<T>` that:
+- Inspects each navigation entry's metadata for a bottom sheet marker
+- If found, creates a `BottomSheetScene` (an `OverlayScene`)
+- If not found, returns null to let other strategies handle it
+
+```kotlin
+class BottomSheetSceneStrategy<T : Any> : SceneStrategy<T> {
+    override fun SceneStrategyScope<T>.calculateScene(entries: List<NavEntry<T>>): Scene<T>? {
+        val lastEntry = entries.lastOrNull()
+        val bottomSheetProperties = lastEntry?.metadata?.get(BOTTOM_SHEET_KEY) 
+            as? ModalBottomSheetProperties
+        return bottomSheetProperties?.let { properties ->
+            BottomSheetScene(
+                key = lastEntry.contentKey as T,
+                entry = lastEntry,
+                modalBottomSheetProperties = properties,
+                onBack = onBack
+            )
+        }
+    }
+}
+```
+
+**2. BottomSheetScene**
+
+An `OverlayScene<T>` that wraps the entry's content in a `ModalBottomSheet`:
+
+```kotlin
+@OptIn(ExperimentalMaterial3Api::class)
+internal class BottomSheetScene<T : Any>(
+    override val entries: List<NavEntry<T>>,
+    private val onBack: () -> Unit,
+) : OverlayScene<T> {
+    override val content: @Composable (() -> Unit) = {
+        ModalBottomSheet(onDismissRequest = onBack) {
+            entry.Content()
+        }
+    }
+}
+```
+
+**3. Entry Registration with Metadata**
+
+Feature modules mark entries for bottom sheet display using metadata:
+
+```kotlin
+@Module
+@InstallIn(ActivityRetainedComponent::class)
+object BottomSheetModule {
+    @IntoSet
+    @Provides
+    fun provideBottomSheetEntryProviderInstaller(): EntryProviderInstaller = {
+        entry<BottomSheetNavigation.BottomSheet>(
+            metadata = BottomSheetSceneStrategy.bottomSheet()  // ← Metadata marker
+        ) {
+            BottomSheetUi()
+        }
+    }
+}
+```
+
+**4. MainActivity Integration**
+
+The strategy must be registered with `NavDisplay`:
+
+```kotlin
+setContent {
+    val bottomSheetStrategy = remember { BottomSheetSceneStrategy<NavKey>() }
+    NavDisplay(
+        backStack = navigator.backStack,
+        onBack = { navigator.goBack() },
+        sceneStrategy = bottomSheetStrategy,  // ← Register strategy
+        entryProvider = entryProvider { ... }
+    )
+}
+```
+
+#### Module Structure
+
+```
+bottomsheet/
+├── api/                              # Public contracts
+│   └── BottomSheetNavigation.kt      # NavKey definitions
+└── impl/                             # Implementation
+    ├── BottomSheetSceneStrategy.kt   # Scene strategy
+    ├── BottomSheetUi.kt             # UI composable
+    └── BottomSheetModule.kt          # Hilt registration
+```
+
+#### Benefits of Scene Strategy Approach
+
+| Benefit | Description |
+|---------|-------------|
+| **Reusable** | Any entry can become a bottom sheet by adding metadata |
+| **Type-safe** | Compile-time checked navigation |
+| **Composable** | Multiple strategies can coexist |
+| **Isolated** | Bottom sheet logic separated from navigation logic |
+| **Flexible** | Easy to customize bottom sheet properties per entry |
+
+#### Usage
+
+From any screen with access to `Navigator`:
+```kotlin
+navigator.goTo(BottomSheetNavigation.BottomSheet)
+```
+
+The user can dismiss by:
+- Swiping down
+- Tapping outside the sheet
+- Pressing back button
+
+All trigger `navigator.goBack()` automatically.
+
+---
+
+### 3. 🚧 Under Construction
 
 > **Coming Soon**: Additional navigation patterns and use cases will be documented here.
 
 *Planned topics may include:*
-- Bottom sheet navigation
 - Nested navigation graphs
 - Deep linking
 - Shared element transitions
