@@ -6,11 +6,14 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import com.example.bottomsheet.impl.BottomSheetSceneStrategy
 import com.example.design.Nav3SampleTheme
 import com.example.foundation.navigation.EntryProviderInstaller
 import com.example.foundation.navigation.Navigator
@@ -43,11 +46,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Nav3SampleTheme {
+                val bottomSheetStrategy = remember { BottomSheetSceneStrategy<NavKey>() }
                 Scaffold { paddingValues ->
                     NavDisplay(
                         backStack = navigator.backStack,
                         modifier = Modifier.padding(paddingValues),
                         onBack = { navigator.goBack() },
+                        sceneStrategy = bottomSheetStrategy,
                         entryProvider = entryProvider {
                             entryProviderScopes.forEach { builder ->
                                 builder()
