@@ -13,10 +13,13 @@ A sample Android project demonstrating **Jetpack Navigation 3** with **Hilt Depe
 
 ```
 Nav3Sample/
-├── app/                          # Application module (entry point)
+├── app/                          # Application module (entry point, MainActivity only)
 ├── foundation/
 │   ├── design/                   # Shared design system (Theme, Colors, Typography)
 │   └── navigation/               # Core navigation utilities (Navigator, EntryProviderInstaller)
+├── home/
+│   ├── api/                      # Public navigation contracts (HomeNavigation.Home)
+│   └── impl/                     # Home screen implementation (UI, DI)
 ├── offers/
 │   ├── api/                      # Public navigation contracts (NavKeys)
 │   └── impl/                     # Feature implementation (UI, ViewModels, DI)
@@ -38,6 +41,11 @@ graph TD
         DESIGN[":foundation:design"]
     end
 
+    subgraph "Feature: Home"
+        HOME_API[":home:api"]
+        HOME_IMPL[":home:impl"]
+    end
+
     subgraph "Feature: Offers"
         OFFERS_API[":offers:api"]
         OFFERS_IMPL[":offers:impl"]
@@ -50,9 +58,16 @@ graph TD
 
     APP --> NAV
     APP --> DESIGN
-    APP --> OFFERS_API
+    APP --> HOME_API
+    APP --> HOME_IMPL
     APP --> OFFERS_IMPL
     APP --> PROFILE_IMPL
+
+    HOME_API --> NAV
+    HOME_IMPL --> HOME_API
+    HOME_IMPL --> NAV
+    HOME_IMPL --> DESIGN
+    HOME_IMPL --> OFFERS_API
 
     OFFERS_API --> NAV
     OFFERS_IMPL --> OFFERS_API
@@ -68,13 +83,15 @@ graph TD
     style APP fill:#e1f5fe
     style NAV fill:#fff3e0
     style DESIGN fill:#fff3e0
+    style HOME_API fill:#e3f2fd
+    style HOME_IMPL fill:#bbdefb
     style OFFERS_API fill:#e8f5e9
     style OFFERS_IMPL fill:#c8e6c9
     style PROFILE_API fill:#fce4ec
     style PROFILE_IMPL fill:#f8bbd9
 ```
 
-> **Key Insight**: Notice how `:offers:impl` only depends on `:profile:api` (not `:profile:impl`). This ensures feature modules can navigate to each other without accessing implementation details.
+> **Key Insight**: Notice how `:home:impl` depends on `:offers:api` (not `:offers:impl`), and `:offers:impl` depends on `:profile:api` (not `:profile:impl`). This ensures feature modules can navigate to each other without accessing implementation details.
 
 ---
 
@@ -105,9 +122,9 @@ This use case demonstrates the **ideal multi-module navigation pattern** where:
                     ┌───────────────┼───────────────┐
                     ▼               ▼               ▼
             ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
-            │ OffersModule │ │ ProfileModule│ │  MainModule  │
+            │  HomeModule  │ │ OffersModule │ │ ProfileModule│
             │   @IntoSet   │ │   @IntoSet   │ │   @IntoSet   │
-            │  installer   │ │   installer  │ │   installer  │
+            │   installer  │ │   installer  │ │   installer  │
             └──────────────┘ └──────────────┘ └──────────────┘
 ```
 
@@ -153,32 +170,38 @@ abstract class NavigationModule {
 }
 ```
 
-**4. Feature Module Registration** (`offers:impl`)
+**4. Feature Module Registration** (`home:impl`)
 
 Each feature module provides its entry installers using `@IntoSet`:
 
 ```kotlin
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-object OffersModule {
+object HomeModule {
 
     @IntoSet
     @Provides
-    fun provideOffersEntryProviderInstaller(navigator: Navigator): EntryProviderInstaller = {
-        entry<OffersNavigation.Offers> {
-            OffersUi(
-                onOfferClick = { navigator.goTo(OffersNavigation.OfferDetails(it)) }
+    fun provideHomeEntryProviderInstaller(navigator: Navigator): EntryProviderInstaller = {
+        entry<HomeNavigation.Home> {
+            HomeScreen(
+                openOffers = { navigator.goTo(OffersNavigation.Offers) }
             )
         }
     }
 }
 ```
 
-**5. NavKey Definitions** (`offers:api`)
+**5. NavKey Definitions** (`home:api`, `offers:api`)
 
 API modules expose only the navigation contracts:
 
 ```kotlin
+// home/api/HomeNavigation.kt
+object HomeNavigation {
+    object Home : NavKey
+}
+
+// offers/api/OffersNavigation.kt
 object OffersNavigation {
     object Offers : NavKey
     data class OfferDetails(val id: Int) : NavKey
@@ -255,6 +278,9 @@ git clone <repository-url>
 |------|-------------|
 | `foundation/navigation/NavigationUtil.kt` | `Navigator` class and `EntryProviderInstaller` typealias |
 | `foundation/navigation/NavigationModule.kt` | Hilt module with `@Multibinds` declaration |
+| `home/api/HomeNavigation.kt` | Public `NavKey` definitions for home feature |
+| `home/impl/HomeModule.kt` | Hilt module registering home entry providers |
+| `home/impl/HomeScreen.kt` | Home screen UI implementation |
 | `offers/api/OffersNavigation.kt` | Public `NavKey` definitions for offers feature |
 | `offers/impl/OffersModule.kt` | Hilt module registering offers entry providers |
 | `app/MainActivity.kt` | Entry point that assembles all navigation entries |

@@ -1,4 +1,4 @@
-package com.example.nav3sample.ui
+package com.example.home.impl
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MainScreen(openOffers: () -> Unit, modifier: Modifier = Modifier) {
+fun HomeScreen(openOffers: () -> Unit, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -30,3 +30,4 @@ fun MainScreen(openOffers: () -> Unit, modifier: Modifier = Modifier) {
         }
     }
 }
+

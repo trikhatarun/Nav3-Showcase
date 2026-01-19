@@ -21,6 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "Nav3 Sample"
 include(":app")
+include(":home:api")
+include(":home:impl")
 include(":offers:api")
 include(":offers:impl")
 include(":profile:api")
