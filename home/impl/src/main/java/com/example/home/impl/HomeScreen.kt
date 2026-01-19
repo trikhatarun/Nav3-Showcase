@@ -13,7 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(openOffers: () -> Unit, modifier: Modifier = Modifier) {
+fun HomeScreen(
+    openOffers: () -> Unit,
+    openBottomSheet: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -25,7 +29,7 @@ fun HomeScreen(openOffers: () -> Unit, modifier: Modifier = Modifier) {
             Text("Open Offers")
         }
         Spacer(Modifier.size(16.dp))
-        Button(onClick = {}) {
+        Button(onClick = { openBottomSheet() }) {
             Text("Open BottomSheet")
         }
     }

@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":foundation:navigation"))
     implementation(project(":home:api"))
     implementation(project(":offers:api"))
+    implementation(project(":bottomsheet:api"))
     implementation(project(":foundation:design"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

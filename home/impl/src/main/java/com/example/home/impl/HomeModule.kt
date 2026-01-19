@@ -1,5 +1,6 @@
 package com.example.home.impl
 
+import com.example.bottomsheet.api.BottomSheetNavigation
 import com.example.foundation.navigation.EntryProviderInstaller
 import com.example.foundation.navigation.Navigator
 import com.example.home.api.HomeNavigation
@@ -19,7 +20,8 @@ object HomeModule {
     fun provideHomeEntryProviderInstaller(navigator: Navigator): EntryProviderInstaller = {
         entry<HomeNavigation.Home> {
             HomeScreen(
-                openOffers = { navigator.goTo(OffersNavigation.Offers) }
+                openOffers = { navigator.goTo(OffersNavigation.Offers) },
+                openBottomSheet = { navigator.goTo(BottomSheetNavigation.BottomSheet) }
             )
         }
     }
