@@ -1,19 +1,19 @@
 package com.example.nav3sample.di
 
 import com.example.foundation.navigation.Navigator
-import com.example.nav3sample.MainNavigation
+import com.example.home.api.HomeNavigation
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ActivityRetainedComponent::class)
 object AppModule {
 
     @Provides
-    @Singleton
-    fun provideNavigator(): Navigator = Navigator(startDestination = MainNavigation.Main)
+    @ActivityRetainedScoped
+    fun provideNavigator(): Navigator = Navigator(startDestination = HomeNavigation.Home)
 }
 

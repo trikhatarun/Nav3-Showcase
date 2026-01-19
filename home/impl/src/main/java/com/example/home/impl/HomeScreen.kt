@@ -1,4 +1,4 @@
-package com.example.nav3sample.ui
+package com.example.home.impl
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MainScreen(
+fun HomeScreen(
     openOffers: () -> Unit,
     openBottomSheet: () -> Unit,
     modifier: Modifier = Modifier
@@ -34,3 +34,4 @@ fun MainScreen(
         }
     }
 }
+
